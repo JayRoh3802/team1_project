@@ -20,7 +20,7 @@ public class BookBoardDAO {
 	public ResultSet rs;
 	
 	public List<BookBoardVO> list(PageObject pageObject) throws Exception{
-		List<BookBoardVO> list = null;
+		List<BookBoardVO> list = new ArrayList<BookBoardVO>();
 		
 		// 예외처리
 		try {
@@ -133,9 +133,8 @@ public class BookBoardDAO {
 		// ResultSet에 저장된 결과값이 null이 아닐시 db에 저장된 데이터를 출력한다.
 		if(rs != null && rs.next()) {
 			totalRow = rs.getLong(1);
-		} else {
-			System.out.println("삭제할 학생의 정보가 없습니다.");
-		}
+		} 
+		
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -188,7 +187,6 @@ public class BookBoardDAO {
 			if(pageObject.getKey().indexOf("p") != -1) // -1 이면 데이터가 없다는 것이다.
 				pstmt.setString(idx++, "%" + word + "%");
 		} // end of if
-		
 		return idx;
 	} // end of search
 

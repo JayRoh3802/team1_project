@@ -17,7 +17,7 @@ PageObject pageObject = PageObject.getInstance(request);
 // DB에서 데이터를 가져온다. 
 BookBoardListService Service = new BookBoardListService();
 List <BookBoardVO> list = Service.service(pageObject);
-System.out.println(list);
+System.out.println("/bookBoard/list : " + list);
 
 //el 객체는 getter를 사용해서 데이터를 꺼낸다.
 request.setAttribute("list", list); 
@@ -118,7 +118,8 @@ th{
 <!--  리스트에 데이터가 존재하지 않을때 출력할 화면 -->
   	<c:if test="${empty list }">
 <tr>
-	<td colspan="5">데이터가 존재하지 않습니다.</td>
+	<td colspan="5">데이터가 존재하지 않습니다.</td><br><br>
+	<td><a href="list.jsp" class="btn btn-default">목록으로</a></td>
 </tr>
 </c:if>
 <!-- 줄넘김을 위한 함수 -->
@@ -150,7 +151,6 @@ th{
   
 	<% i++;
 	// 이미지 3개를 출력하면 새로운 줄을 만든다. 만약 출력된 이미지가 총 데이터의 갯수와 같다면 그만 만든다.
-	System.out.print(i );
 	if(i % 3 == 0 && i != list.size() ){%>
 <!-- 	 한 줄을 마감하고 새로운 줄을 시작한다.  -->
 	</div>

@@ -11,7 +11,8 @@
 <title>도서 등록</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- /js/formUtil.js의 경로를 지정해준다. -->
-<script type="text/javascript" src="/js/formUtil.js">
+<script type="text/javascript" src="/js/formUtil.js?v=1"></script>
+<script type="text/javascript">
 $(function() {
 	$("#writeForm").submit(function(){
 		// 필수입력 항목 검사
