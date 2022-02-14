@@ -40,9 +40,9 @@ $(function() {
 	});
 	
 	// 데이터 넘어갈때 유효성 검사
-	// 다른 데이터들은 글자수나 형식이 무의미해 넣지 않는다.
 	$("#updateForm").submit(function(){
 		if(!regTest(reg_date, "#pubDate", "yyyy-MM-dd 형식의 날짜 데이터")) return false;
+		if(!regTest(reg_num, "#price", "숫자")) return false;
 	});
 });
 </script>

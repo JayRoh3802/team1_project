@@ -15,6 +15,8 @@ body form {
 }
 
 </style>
+<!-- emptyCheck(objStr, itemName) 함수 js 파일을 포함 시킨다. -->
+<script type="text/javascript" src="/js/formUtil.js"></script>
 <script type="text/javascript">
 //데이터 유효성 검사
 $(function() {
@@ -31,6 +33,21 @@ $(function() {
 	.blur(function(){
 		console.log("입력란 나감.");
 		$(this).css("background", "#eee");
+	});
+	
+	$("#writeForm").submit(function() {
+		// alert("데이터를 넘기려고 한다.");
+		
+		// 제목 -> 비어있으면 경고>포커스>이동막기 
+		if(emptyCheck("#title", "제목")) return false;
+		// 내용 -> 비어있으면 경고>포커스>이동막기 
+		if(emptyCheck("#content", "내용")) return false;	
+			
+		// 길이 제한 검사 - JS
+		// 제목은 4~100 까지 사용 가능
+		if(!lengthCheck("#title", "제목", 4, 100)) return false;
+		// 내용은 4~666(2000 바이트) 까지 사용 가능
+		if(!lengthCheck("#content", "내용", 4, 666)) return false;	
 	});
 });
 </script>

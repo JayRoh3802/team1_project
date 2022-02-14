@@ -1,4 +1,4 @@
-package com.BookIng.qna.dao;
+ package com.BookIng.qna.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,13 +21,16 @@ public class QnaDAO {
 	// 결과 객체
 	ResultSet rs = null;
 	
-	// 1. 질문답변 리스트 메소드 (데이터를 가져온다.)
+	// 1-1. 질문답변 리스트 메소드 (데이터를 가져온다.)
 	public List<QnaVO> list(PageObject pageObject) throws Exception {
 		// 데이터 확인
 		System.out.println("1.QnaDAO.list()");
 		// 리턴 데이터 변수 선언
 		List<QnaVO> list = null;
 		
+		// 검색을 하는 경우
+		boolean searchCondition =  pageObject.getWord() != null && !pageObject.getWord().equals("");
+				
 		// 데이터 채우기 - DB에서 가져오므로 예외처리 필수
 		try { // 정상 처리 
 			
@@ -37,9 +40,9 @@ public class QnaDAO {
 			
 			// 3. 실행할 sql문 작성
 			// 3-1. 원본 데이터 가져오기
-			String sql = " SELECT q.no, q.title, q.id, m.name, q.writeDate, q.hit, q.refNo, q.ordNo, q.levNo, q.parentNo "
-					+ " FROM qna q, member m "
-					+ " WHERE m.id = q.id "
+			String sql = " SELECT q.no, q.title, q.id, m.name, q.writeDate, q.hit, q .refNo, q.ordNo, q.levNo, q.parentNo "
+					+ " FROM qna q, member m " + search(pageObject,"q.")  // 실질적인 데이터 (원본데이터 가져오기)
+					+ ((searchCondition)?" AND (q.id = m.id)" : " WHERE q.id = m.id ")
 					+ " ORDER BY q.refNo DESC, q.ordNO ";
 			// 3-2. 순서번호 붙이기 
 			sql = " SELECT rownum rnum, no, title, id, name, writeDate, hit, "
@@ -52,10 +55,13 @@ public class QnaDAO {
 			System.out.println("2.QnaDAO.list().sql : " + sql);
 			
 			// 4. 실행객체 & 데이터 세팅
-			pstmt = con.prepareStatement(sql);
+			pstmt = con.prepareStatement(sql); 
+			int idx = 1;
+			// 조건에 해당되는 pstmt 세팅 
+			idx = searchSetData(pageObject, pstmt, idx);
 			// startRow, endRow의 계산은 setTotalRow()를 호출해야하만 나온다. 아니면 0 이되서 데이터가 나오지 않는다.
-			pstmt.setLong(1, pageObject.getStartPage());
-			pstmt.setLong(2, pageObject.getEndRow());
+			pstmt.setLong(idx++, pageObject.getStartPage()); // 시작 번호 -1 : 1페이지 정보
+			pstmt.setLong(idx++, pageObject.getEndRow()); // 끝 번호 - 10 : 1페이지 정보
 			
 			// 5. 실행
 			rs = pstmt.executeQuery();
@@ -106,7 +112,7 @@ public class QnaDAO {
 		return list;
 	} // end of list
 	
-	// 1-1. 페이지 처리를 위해서 전체 데이터 개수를 가져오는 메소드
+	// 1-2. 페이지 처리를 위해서 전체 데이터 개수를 가져오는 메소드
 	public long getTotalRow(PageObject pageObject) throws Exception {
 		
 		// 실행 위치와 전달 데이터 확인
@@ -123,11 +129,21 @@ public class QnaDAO {
 			
 			// 3. 실행할 sql문 작성
 			String sql = " SELECT COUNT(*) FROM qna ";
-			// 3-1. 데이터 확인 
+			
+			// 3-1. search 메소드 문장
+			if(pageObject.getWord() != null && !pageObject.getWord().equals(""))
+				// search(페이지 Object-검색, 별칭-필드 앞에 붙일 별칭)
+				sql += search(pageObject, ""); // "" : 아무것도 붙이지 말라
+			
+			// 3-2. 데이터 확인 
 			System.out.println("2.QnaDAO.getTotalRow().pageObject : " + sql);
 			
-			// 4. 실행객체 & 데이터 세팅
-			pstmt = con.prepareStatement(sql);
+			// 4. 실행객체 & 데이터 세팅 - 추가 (searchSetData)
+			pstmt = con.prepareStatement(sql);		
+			int idx = 1;
+			
+			// 4-1. 조건이 있는 경우 데이터 세팅을 해야한다.(searchSetData)
+			idx = searchSetData(pageObject, pstmt, idx);
 			
 			// 5. 실행 - select : executeQuery() / insert, update, delete : executeUpdate()
 			rs = pstmt.executeQuery();
@@ -157,6 +173,38 @@ public class QnaDAO {
 		
 		return totalRow;
 	} // end of getTotalRow
+	
+	// 1-3. 검색에 대한 문자열을 붙이는 메서드 -- 만약에 word가 있는 경우만 조건을 붙인다.
+	private String search(PageObject pageObject, String alias) throws Exception {
+		String condition = "";
+		// -> !pageObject.getWord().equals("") : 문자열이 있기 한데 아무것도 없는 쌍따옴표로 찍은 문자열도 안된다.
+		if(pageObject.getWord() != null && !pageObject.getWord().equals("")) {
+			condition += " where ( 1 = 0 " ;
+			if(pageObject.getKey().indexOf("t") != -1) // -1 이면 데이터가 없다는 것이다.
+				condition += " or  " + alias + "title like ? ";
+			if(pageObject.getKey().indexOf("i") != -1) // -1 이면 데이터가 없다는 것이다.
+				condition += " or "  + alias + "id like ? ";
+			condition += ")";
+		} // end of if
+		
+		return condition;
+	} // end of search
+	
+	// 1-4. 검색에 대한 문자여을 붙이 메서드 -- 만약에 word가 있는 경우만 조건을 붙인다.
+	private int searchSetData(PageObject pageObject, PreparedStatement pstmt, int idx) throws Exception {
+		
+		String word = pageObject.getWord();
+		
+		// -> !pageObject.getWord().equals("") : 문자열이 있기 한데 아무것도 없는 쌍따옴표로 찍은 문자열도 안된다.
+		if(word != null && !word.equals("")) {
+			if(pageObject.getKey().indexOf("t") != -1) // -1 이면 데이터가 없다는 것이다.
+				pstmt.setString(idx++, "%" + word + "%");
+			if(pageObject.getKey().indexOf("i") != -1) // -1 이면 데이터가 없다는 것이다.
+				pstmt.setString(idx++, "%" + word + "%");
+		} // end of if
+		
+		return idx;
+	} // end of search
 	
 	// 2. 질문 답변 보기
 	// 2-1. 보기 데이터 가져오기
@@ -290,7 +338,7 @@ public class QnaDAO {
 			con = DB.getConnection();
 			
 			// 3. 실행할 sql문 작성
-			String sql = " INSERT INTO qna(no, title, content, id, refNo, ordNo, levNO)'"
+			String sql = " INSERT INTO qna(no, title, content, id, refNo, ordNo, levNO) "
 					+ " VALUES(qna_seq.NEXTVAL, ?, ?, ?, qna_seq.NEXTVAL, 1, 0) ";
 			
 			// 4. 실행객체 & 데이터 세팅

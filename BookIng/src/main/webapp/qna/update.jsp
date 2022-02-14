@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="com.BookIng.qna.service.QnaUpdateService"%>
 <%@page import="com.BookIng.qna.vo.QnaVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -26,5 +27,9 @@ service.service(vo);
 
 
 // 게시판 리스트로 자동 이동 시킨다.
-response.sendRedirect("view.jsp?no=" + no + "&inc=0");
+// response.sendRedirect("view.jsp?no=" + no + "&inc=0");
+// tomcat Server에서의 한글은 iso-8805-1 코드이다. 한글이 물음표(?)표로 나타난다.
+response.sendRedirect("view.jsp?no=" + no + "&inc=0" + "&key=" + request.getParameter("key") 
++ "&word=" + URLEncoder.encode(request.getParameter("word"), "utf-8")); 
+
 %>

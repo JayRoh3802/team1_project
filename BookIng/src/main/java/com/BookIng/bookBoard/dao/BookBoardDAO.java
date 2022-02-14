@@ -31,7 +31,7 @@ public class BookBoardDAO {
 			//db데이터를 불러올 sql 쿼리문을 String sql에 입력한다.
 			String sql = "select bookNo, title, writer, genre, publisher, "
 					+ " to_char(pubDate, 'yyyy-mm-dd')pubDate, price, cover "
-					+ " from bookBoard "
+					+ " from bookBoard " + search(pageObject)
 					+ " order by bookNo desc " ;
 			// 3-1. 페이지 처리를 위한 sql
 			sql = "select rownum rnum, bookNo, title, writer, genre, publisher, pubDate, price, cover"
@@ -42,8 +42,11 @@ public class BookBoardDAO {
 			// 4. 실행객체
 			// Connection으로 sql을 prepareStatement에 전달해 실행객체를 생성한다.
 			pstmt = con.prepareStatement(sql);
-			pstmt.setLong(1, pageObject.getStartRow()); 
-			pstmt.setLong(2, pageObject.getEndRow()); 
+			int idx = 1;
+			// 조건에 해당되는 pstmt 세팅 
+			idx = searchSetData(pageObject, pstmt, idx);
+			pstmt.setLong(idx++, pageObject.getStartRow()); 
+			pstmt.setLong(idx++, pageObject.getEndRow()); 
 			// 5. 실행
 			// executeQuery를 호출하여 sql 쿼리문을 실행한다.
 			rs = pstmt.executeQuery();
@@ -67,7 +70,7 @@ public class BookBoardDAO {
 					
 					// vo를 list에 담기
 					list.add(vo);
-				}
+				} 
 			} // if문의 끝
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -88,8 +91,12 @@ public class BookBoardDAO {
 		
 	}
 	// 페이지 처리를 위한 dao
-	public long getTotalRow(PageObject pageObject) {
+	public long getTotalRow(PageObject pageObject) throws Exception {
 		// TODO Auto-generated method stub
+		
+		// 실행 위치와 전달 데이터 확인
+		System.out.println("1.QnaDAO.getTotalRow().pageObject : " + pageObject );
+		
 		long totalRow = 0;
 		
 		try {
@@ -101,9 +108,22 @@ public class BookBoardDAO {
 		// 3. sql
 		//db데이터를 불러올 sql 쿼리문을 String sql에 입력한다.
 		String sql = "SELECT count(*) from bookBoard ";
-		// 4. 실행객체
+		
+		// 3-1. search 메소드 문장
+		if(pageObject.getWord() != null && !pageObject.getWord().equals(""))
+			// search(페이지 Object-검색, 별칭-필드 앞에 붙일 별칭)
+			sql += search(pageObject); // "" : 아무것도 붙이지 말라
+		
+		// 3-2. 데이터 확인 
+					System.out.println("2.QnaDAO.getTotalRow().pageObject : " + sql);
+					
+		// 4. 실행객체 & 데이터 세팅 - 추가 (searchSetData)
 		// Connection으로 sql을 prepareStatement에 전달해 실행객체를 생성한다.
-		pstmt = con.prepareStatement(sql);
+		pstmt = con.prepareStatement(sql);		
+		int idx = 1;
+					
+		// 4-1. 조건이 있는 경우 데이터 세팅을 해야한다.(searchSetData)
+		idx = searchSetData(pageObject, pstmt, idx);
 		
 		// 5. 실행
 		// executeQuery를 호출하여 sql 쿼리문을 실행한다.
@@ -113,6 +133,8 @@ public class BookBoardDAO {
 		// ResultSet에 저장된 결과값이 null이 아닐시 db에 저장된 데이터를 출력한다.
 		if(rs != null && rs.next()) {
 			totalRow = rs.getLong(1);
+		} else {
+			System.out.println("삭제할 학생의 정보가 없습니다.");
 		}
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -130,6 +152,45 @@ public class BookBoardDAO {
 //		System.out.println("BoardDAO.view().vo - " + vo);
 		return totalRow;
 	}
+	
+	// 1-3. 검색에 대한 문자열을 붙이는 메서드 -- 만약에 word가 있는 경우만 조건을 붙인다.
+	private String search(PageObject pageObject) throws Exception {
+		String condition = "";
+		// -> !pageObject.getWord().equals("") : 문자열이 있기 한데 아무것도 없는 쌍따옴표로 찍은 문자열도 안된다.
+		if(pageObject.getWord() != null && !pageObject.getWord().equals("")) {
+			condition += " where 1 = 0 " ;
+			if(pageObject.getKey().indexOf("t") != -1) // -1 이면 데이터가 없다는 것이다.
+				condition += " or title like ? ";
+			if(pageObject.getKey().indexOf("w") != -1) // -1 이면 데이터가 없다는 것이다.
+				condition += " or writer like ? ";
+			if(pageObject.getKey().indexOf("g") != -1) // -1 이면 데이터가 없다는 것이다.
+				condition += " or genre like ? ";
+			if(pageObject.getKey().indexOf("p") != -1) // -1 이면 데이터가 없다는 것이다.
+				condition += " or publisher like ? ";
+		} // end of if
+		
+		return condition;
+	} // end of search
+	
+	// 1-4. 검색에 대한 문자여을 붙이 메서드 -- 만약에 word가 있는 경우만 조건을 붙인다.
+	private int searchSetData(PageObject pageObject, PreparedStatement pstmt, int idx) throws Exception {
+		
+		String word = pageObject.getWord();
+		
+		// -> !pageObject.getWord().equals("") : 문자열이 있기 한데 아무것도 없는 쌍따옴표로 찍은 문자열도 안된다.
+		if(word != null && !word.equals("")) {
+			if(pageObject.getKey().indexOf("t") != -1) // -1 이면 데이터가 없다는 것이다.
+				pstmt.setString(idx++, "%" + word + "%");
+			if(pageObject.getKey().indexOf("w") != -1) // -1 이면 데이터가 없다는 것이다.
+				pstmt.setString(idx++, "%" + word + "%");
+			if(pageObject.getKey().indexOf("g") != -1) // -1 이면 데이터가 없다는 것이다.
+				pstmt.setString(idx++, "%" + word + "%");
+			if(pageObject.getKey().indexOf("p") != -1) // -1 이면 데이터가 없다는 것이다.
+				pstmt.setString(idx++, "%" + word + "%");
+		} // end of if
+		
+		return idx;
+	} // end of search
 
 	public BookBoardVO view(long bookNo) throws Exception {
 		// TODO Auto-generated method stub

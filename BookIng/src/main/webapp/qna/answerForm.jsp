@@ -1,3 +1,4 @@
+<%@page import="com.webjjang.util.PageObject"%>
 <%@page import="com.BookIng.qna.vo.QnaVO"%>
 <%@page import="com.BookIng.qna.service.QnaViewService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -6,6 +7,10 @@
 <%
 // 여기가 자바 부분 입니다.
 // 데이터 받기 - 번호, 관련글번호, 순서번호 들여쓰기번호, 제목
+
+// 넘어오는 페이지 정보를 받아서 페이지 객체 생성
+PageObject pageObject = PageObject.getInstance(request);
+
 String strNo = request.getParameter("no");
 long no = Long.parseLong(strNo);
 
@@ -18,6 +23,7 @@ System.out.println("answerForm.jsp - vo : " + vo);
 
 //EL 이나 JSTL에서 데이터를 사용하기 위해서 기본 저장 객체에 저장해 둔다.
 request.setAttribute("vo", vo);
+request.setAttribute("pageObject", pageObject);
 %>
 <!DOCTYPE html>
 <html>
@@ -46,6 +52,10 @@ body form {
 	<input type="hidden" name="refNo" value="${vo.refNo }">
 	<input type="hidden" name="ordNo" value="${vo.ordNo }">
 	<input type="hidden" name="levNo" value="${vo.levNo }">
+	<!-- 넘어오는 key, word  -->
+	<input name="key" type="hidden" value="${pageObject.key }">
+	<input name="word" type="hidden" value="${pageObject.word }">
+		
 		<div class="form-group">
 				<label for="no" class="control-label col-sm-2">번호</label>
 				<div class="col-sm-10">

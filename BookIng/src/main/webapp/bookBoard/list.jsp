@@ -12,6 +12,7 @@
 <%
 // 페이지 처리를 위해 request를 받아 PageObject의 getInstance로 저장한다.
 PageObject pageObject = PageObject.getInstance(request);
+
 // list에 데이터 수집은 없다.
 // DB에서 데이터를 가져온다. 
 BookBoardListService Service = new BookBoardListService();
@@ -27,8 +28,6 @@ request.setAttribute("pageObject", pageObject);
 <head>
 <meta charset="UTF-8">
 <title>도서 목록</title>
-<script type="text/javascript">
-</script>
 <style type="text/css">
 /* 리스트 데이터를 각각의 네모안에 보기좋게 넣어준다 */
 #card .thumbnail{
@@ -62,12 +61,59 @@ th{
 #hidden {
 	display: none;
 }
+.navbar-form {
+	padding-left: 1px;
+}
 </style>
+<script type="text/javascript">
+// $(function() {
+// 	//  글보기로 페이지 이동 시키는 처리문 작성
+// 	// 1. 리스트의 한줄을 선택, 2. 이벤트 함수를 붙인다., 3. 이벤트 함수에 동작할 처리 함수를 파라메터로 넣어준다.
+// 	// JQuery
+// 	$(".dataRow").click(function(){
+// 		// var no -> javaScript 변수 선언
+// 		// $(this).find(".no").text() -> jQuery
+// 		var bookNo = $(this).find(".bookNo").text();
+// 		// javaScript
+// 		location = "view.jsp?bookNo=" + bookNo + "&page=${pageObject.page}&perPageNum=${pageObject.perPageNum}"
+// 			 	+ "&key=${pageObject.key}&word=${pageObject.word}"; 
+// 	});			 
+// });
+</script>
 </head>
 <body>
 <!-- bootstrap을 이용해 보기좋게 만들어준다. -->
 <div class="container">
  <h2>도서 목록</h2>
+ <form action="list.jsp" class="navbar-form navbar-right">
+			<!-- 페이지 정보를 다시 그대로 보내준다. -->
+			<!-- value="1" : 검색을 했으면 검색한 정보에 대한 데이터를 1로 넘어간다. -->
+			<input name="page" type="hidden" value="1">
+			<input name="perPageNum" type="hidden" value="${pageObject.perPageNum }">
+			<div class="input-group">	
+    			<div class="form-group navbar-left"> <!-- 왼쪽으로 크기 조정 -->
+    			<!-- 검색 종류 선택 (pulldown 메뉴 - select) : key -->
+				<select name="key" class="form-control">
+					<option value="t" ${(pageObject.key == "t")? "selected":"" }>제목</option>
+					<option value="w" ${(pageObject.key == "w")? "selected":"" }>작가</option>
+					<option value="g" ${(pageObject.key == "g")? "selected":"" }>장르</option>			
+					<option value="p" ${(pageObject.key == "p")? "selected":"" }>출판사</option>			
+				</select>
+    			<!-- pageObject의 word 값과 맞춰주라. 
+					  jsp에서 검색 후 텍스트를 유지시켜줘야 하기 때문에 value값을 주다.-->
+    			<input id="word" type="text" class="form-control" name="word" placeholder="Search"
+    					value="${param.word }">
+    			</div>
+    			 <div class="input-group-btn">
+      				<button class="btn btn-default" type="submit">
+        				<i class="glyphicon glyphicon-search"></i>
+      				</button>
+    				</div>
+  				 </div>
+  			</form>
+  			 </div>
+  			 <br>
+  <div class="container">
  <div class="row">
 <!--  리스트에 데이터가 존재하지 않을때 출력할 화면 -->
   	<c:if test="${empty list }">
@@ -121,8 +167,10 @@ th{
 			</div>
 			</c:if>
 <!-- 	페이지를 이동하는 버튼을 생성한다. -->
+<!-- query적용 : 검색후 페이지를 넘겨도 URL 안에 검색 내용 유지 -->
 	<div class="text-center">
-			<pageNav:pageNav listURI="list.jsp" pageObject="${pageObject }"></pageNav:pageNav>
+			<pageNav:pageNav listURI="list.jsp" pageObject="${pageObject }"
+			query="&key=${pageObject.key }&word=${pageObject.word }"/>
 	</div>	
 </body>
 </html>

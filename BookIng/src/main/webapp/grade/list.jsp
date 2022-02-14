@@ -7,8 +7,8 @@
 // 데이터 수집할거 없다
 // DB에서 데이터 가져오기
 GradeListService service = new GradeListService();
+/* List<GradeVO> list = service.service(); */
 List<GradeVO> list = service.service();
-
 System.out.println("list.jsp - list : " + list);
 %>
 <!DOCTYPE html>
@@ -29,21 +29,26 @@ th, td {
 </style>
 </head>
 <body>
-	<div class="container"><!-- jsp전체를 부트스트랩으로 덮기 -->
+	<div class="container">
+		<!-- jsp전체를 부트스트랩으로 덮기 -->
 		<h2>등급 리스트</h2>
-		<div class="form-group"> <!-- 입력 레이아웃을 부트스트랩 형식으로 -->
+		<div class="form-group">
+			<!-- 입력 레이아웃을 부트스트랩 형식으로 -->
 			<form action="write.jsp" method="post">
 				<!-- <input name="gradeNo" placeholder="번호" maxlength="2"
 				pattern="\d{1,2}" required="required" size="3"> 부트스트랩 미적용-->
-				<div class=" col-lg-1"> <!-- 칸 크기 조절 -->
+				<div class=" col-lg-1">
+					<!-- 칸 크기 조절 -->
 					<input type="text" name="gradeNo" required="required"
 						placeholder="번호" class="form-control" id="gradeNo" size="3"
-						pattern="\d{1,2}"> <!-- 등급번호 작성 칸 size 속성은 위아래, 위의 class 속성은 너비-->
+						pattern="\d{1,2}">
+					<!-- 등급번호 작성 칸 size 속성은 위아래, 위의 class 속성은 너비-->
 				</div>
 				<div class=" col-lg-2">
 					<input type="text" name="gradeName" required="required"
 						placeholder="등급명" class="form-control" id="gradeName" size="3"
-						pattern="[가-힣]{1,6}"> <!-- 등급명 작성 칸 -->
+						pattern="[가-힣]{1,6}">
+					<!-- 등급명 작성 칸 -->
 				</div>
 				<!--  <input
 				name="gradeName" placeholder="등급명" pattern="[가-힣]{1,6}"
@@ -69,28 +74,39 @@ th, td {
 				<div class="form-group">
 					<form action="update.jsp" method="post">
 						<tr>
-							<td><%-- <input value="<%=vo.getGradeNo()%>" name="gradeNo"
+							<td>
+								<%-- <input value="<%=vo.getGradeNo()%>" name="gradeNo"
 								readonly="readonly" size="3"> 부트스트랩 미적용--%>
 								<div class=" col-lg-3">
-								<input type="text" name="gradeNo" value="<%=vo.getGradeNo()%>"
-						placeholder="번호" class="form-control" id="gradeNo" size="3"
-						pattern="\d{1,2}"> <!-- 등급번호 수정 칸 --> </div>
-								</td>
-							<td><%-- <input value="<%=vo.getGradeName()%>" name="gradeName"
+									<input type="text" name="gradeNo" value="<%=vo.getGradeNo()%>"
+										placeholder="번호" class="form-control" id="gradeNo" size="3"
+										pattern="\d{1,2}">
+									<!-- 등급번호 수정 칸 -->
+								</div>
+							</td>
+							<td>
+								<%-- <input value="<%=vo.getGradeName()%>" name="gradeName"
 								size="10"> 부트스트랩 미적용 --%>
 								<div class=" col-lg-6">
-								<input type="text" name="gradeName" value="<%=vo.getGradeName()%>"
-						placeholder="등급명" class="form-control" id="gradeNo" size="3"
-						pattern="[가-힣]{1,6}"> <!-- 등급명 수정 칸 --> </div>
-								</td>
-							<td><a href="delete.jsp?gradeNo=<%=vo.getGradeNo()%>"
-								class="btn btn-default">수정</a> 
+									<input type="text" name="gradeName"
+										value="<%=vo.getGradeName()%>" placeholder="등급명"
+										class="form-control" id="gradeName" size="3"
+										pattern="[가-힣]{1,6}">
+									<!-- 등급명 수정 칸 -->
+								</div>
+							</td>
+							<td>
+								<%-- <a href="updateForm.jsp?gradeNo=<%=vo.getGradeNo()%>"
+								class="btn btn-default">수정</a> --%>
+								<button class="btn btn-default">수정</button> 
 								<a href="delete.jsp?gradeNo=<%=vo.getGradeNo()%>"
-								class="btn btn-default">삭제</a></td>
+								class="btn btn-default">삭제</a>
+							</td>
 						</tr>
-			</tbody>
-			</form>
+						</form>
 			</div>
+			</tbody>
+			
 			<%
 			}
 			%>

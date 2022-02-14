@@ -11,25 +11,21 @@
 <title>도서 등록</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- /js/formUtil.js의 경로를 지정해준다. -->
-<script type="text/javascript" src="/js/formUtil.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" src="/js/formUtil.js">
 $(function() {
 	$("#writeForm").submit(function(){
 		// 필수입력 항목 검사
+		// 데이터 넘어갈때 유효성 검사
 		// 제목 -> 제목이 비어있으면 경고->포커스->이동무시 
 		if(emptyCheck("#title", "제목")) return false;
 		if(emptyCheck("#writer", "작가")) return false;
 		if(emptyCheck("#genre", "장르")) return false;
 		if(emptyCheck("#publisher", "출판사")) return false;
 		if(emptyCheck("#pubDate", "출간일")) return false;
-		if(emptyCheck("#price", "가격")) return false;
-		if(emptyCheck("#summary", "줄거리")) return false;
-	});
-	
-	// 데이터 넘어갈때 유효성 검사
-	// 다른 데이터들은 글자수가 무의미해 넣지 않는다.
-	$("#writeForm").submit(function(){
 		if(!regTest(reg_date, "#pubDate", "yyyy-MM-dd 형식의 날짜 데이터")) return false;
+		if(emptyCheck("#price", "가격")) return false;
+		if(!regTest(reg_num, "#price", "숫자")) return false;
+		if(emptyCheck("#summary", "줄거리")) return false;
 	});
 });
 </script>

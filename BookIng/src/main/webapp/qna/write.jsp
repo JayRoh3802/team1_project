@@ -1,3 +1,4 @@
+<%@page import="com.BookIng.member.vo.LoginVO"%>
 <%@page import="com.BookIng.qna.service.QnaWriteService"%>
 <%@page import="com.BookIng.qna.vo.QnaVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -13,13 +14,13 @@ String title = request.getParameter("title");
 String content = request.getParameter("content");
 
 // 아이디는 session에서 꺼낸다.
-// String id = ((LoginVO)session.getAttribute("login")).getId();
+String id = ((LoginVO)session.getAttribute("login")).getId();
 
 // Controller - Service - DAO : QnaVO 객체를 만들어서 전달한다.
 QnaVO vo = new QnaVO();
 vo.setTitle(title);
 vo.setContent(content);
-// vo.setId(id);
+vo.setId(id);
 
 System.out.println("질문 등록 - " + vo);
 

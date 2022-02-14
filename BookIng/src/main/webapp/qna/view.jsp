@@ -1,11 +1,18 @@
+ <%@page import="com.webjjang.util.PageObject"%>
 <%@page import="com.BookIng.qna.vo.QnaVO"%>
 <%@page import="com.BookIng.qna.service.QnaViewService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
  <%--  JSTL : 적용 --%>   
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
 <%
 // 여기가 자바 부분 입니다.
+
+// 넘어오는 페이지 정보를 받아서 페이지 객체 생성
+PageObject pageObject = PageObject.getInstance(request);
+
 // 넘어오는 데이터 수집
 String strNo  = request.getParameter("no");
 long no = Long.parseLong(strNo);
@@ -23,6 +30,7 @@ System.out.println("2.view.jsp - vo : " + vo);
 
 // el 객체는 getter를 사용해서 데이터를 꺼낸다.
 request.setAttribute("vo", vo);
+request.setAttribute("pageObject", pageObject);
 %>
 <!DOCTYPE html>
 <html>
@@ -82,23 +90,25 @@ $(function(){
 	<tr>
 		<td colspan="2">
 			<!-- 로그인 처리가 되어 있으면 나타나는 버튼 -->
-<%-- 			<c:if test="${!empty login }"> --%>
-<!-- 			<!-- 내 질문에 대한 답변할 수 없다. -->
-<%-- 			<c:if test="${login.id != vo.id }"> --%>
-				<a href="answerForm.jsp?no=${vo.no }" class="btn btn-default">
+			<c:if test="${!empty login }"> 
+			<!-- 내 질문에 대한 답변할 수 없다. -->
+ 			<c:if test="${login.id != vo.id }"> 
+				<a href="answerForm.jsp?no=${vo.no }&key=${pageObject.key }&word=${pageObject.word }" class="btn btn-default">
 					답변하기
 				</a>
-<%-- 			</c:if> --%>
+			</c:if>
 			<!-- 내가 작성한 글이거나 관리자인 경우에 보여준다. -->
 			<!-- 로그인 아이디와 vo 아이디 정보가 일치하거나 관리자일 경우만 수정 삭제가 가능하게끔 한다. -->	
-<%-- 				<c:if test="${login.id == vo.id || login.gradeNo == 9 }"> --%>
-					<a href="updateForm.jsp?no=${vo.no }" class="btn btn-default">수정</a>
+				<c:if test="${login.id == vo.id || login.gradeNo == 9 }"> 
+					<a href="updateForm.jsp?no=${vo.no }&page=${param.page }&perPageNum=${parma.perPageNum }&key=${pageObject.key }&word=${pageObject.word }" 
+						class="btn btn-default">수정</a>
 					<a href="delete.jsp?no=${vo.no }" class="btn btn-default" id="deleteBtn">삭제</a>
-<%-- 				</c:if>					 --%>
-<%-- 			</c:if> --%>
-			<a href="list.jsp" class="btn btn-default">리스트</a>
+ 				</c:if>					
+			</c:if>
+			<a href="list.jsp?page=${param.page }&perPageNum=${parma.perPageNum }&key=${pageObject.key }&word=${pageObject.word }" 
+				class="btn btn-default">리스트</a>
 	</tr>
-</table>
+</table> 
 </div>
 </body>
 </html>
