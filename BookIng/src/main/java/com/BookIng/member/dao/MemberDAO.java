@@ -444,6 +444,40 @@ public class MemberDAO {
 	
 	
 }
+	
+	public int grade(MemberVO vo) throws Exception {
+		// TODO Auto-generated method stub
+	int result = 0;
+	
+	try {
+		con = DB.getConnection();
+		String sql = "update member set gradeNo = ? "
+				+ " where id = ? ";
+		pstmt = con.prepareStatement(sql);
+		pstmt.setInt(1, vo.getGradeNo());
+		pstmt.setString(2, vo.getId());
+		
+		result = pstmt.executeUpdate();
+		if (result == 1) System.out.println("수정 완료.");
+		else {
+			System.out.println("수정불가 - ID나 PW가 틀림.");
+			throw new Exception("아이디나 비밀번호를 확인해주십시오.");
+		}
+		
+		
+	} catch (Exception e) {
+		// TODO: handle exception
+		e.printStackTrace();
+	} finally {
+		try {
+			DB.close(con, pstmt);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new Exception("아이디를 확인하십시오." + e);
+		}
+	}return result;
+}
 
 	public int changePhoto(MemberVO vo) throws Exception {
 		// TODO Auto-generated method stub

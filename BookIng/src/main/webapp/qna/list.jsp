@@ -142,7 +142,7 @@ $(function() {
 				</c:forEach> <!-- 답변글 기호 표시 --> 
 				<!-- c:if 만약에 levNo가 0보다 크면 답변아이콘 표시 -->   
 					<c:if test="${vo.levNo > 0 }">
-							<i class="material-icons">&#xe5da;</i>
+							<i class="material-icons">&#xe5da;</i><img src="/upload/re.png">
 						</c:if> ${vo.title }
 					</td>
 					<td>${vo.name }(${vo.id })</td>

@@ -82,7 +82,7 @@ h2.h2 {
 				<td> ${vo.birth } </td>
 				<td> ${vo.tel } </td>
 				<td> ${vo.gradeNo } </td>
-				<td> ${vo.gradeName }  </td>
+				<td>${vo.gradeName}&nbsp;&nbsp;<a href="/member/gradeForm.jsp?id=${vo.id }" class="btn btn-default">등급수정</a></td>
 				<td> ${vo.conDate } </td>
 			</tr>
 		</c:forEach>			
