@@ -8,6 +8,13 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 
+	<servlet>
+	<description>서버의 초기화 실행 서블릿</description>
+	<servlet-name>init</servlet-name>
+	<servlet-class>com.BookIng.util.init.Init</servlet-class>
+	<load-on-startup>1</load-on-startup>
+	</servlet>
+
 	<filter>
 		<description>한글 처리 필터</description>
 		<filter-name>encoding</filter-name>
@@ -19,16 +26,16 @@
 		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
 	
-<!-- 	<filter> -->
-<!-- 	<description>권한 처리 필터</description> -->
-<!-- 	<filter-name>Authority</filter-name> -->
-<!-- 	<filter-class>com.webjjang.utill.filter.AuthorityFilter</filter-class> -->
-<!-- 	</filter> -->
+	<filter>
+	<description>권한 처리 필터</description>
+		<filter-name>Authority</filter-name>
+		<filter-class>com.BookIng.util.filter.AuthorityFilter</filter-class>
+	</filter>
 
-<!-- 	<filter-mapping> -->
-<!-- 	<filter-name>Authority</filter-name> -->
-<!-- 	<url-pattern>*.jsp</url-pattern> -->
-<!-- 	</filter-mapping> -->
+	<filter-mapping>
+		<filter-name>Authority</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
 	
 	<filter>
 		<description>사이트에 레이아웃을 잡는 필터 처리</description>
