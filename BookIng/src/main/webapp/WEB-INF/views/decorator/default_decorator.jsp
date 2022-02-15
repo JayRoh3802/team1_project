@@ -97,6 +97,7 @@ article {
 }
 #viewImg2 {
 	width: 20px;
+	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2), 0 2px 7px 0 rgba(0, 0, 0, 0.19);
 }
 
 #font { 
