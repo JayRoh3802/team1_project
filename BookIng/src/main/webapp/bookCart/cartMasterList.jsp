@@ -1,8 +1,8 @@
+<%@page import="com.BookIng.bookCart.service.BookCartMasterListService"%>
 <%@page import="com.BookIng.member.vo.LoginVO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.BookIng.bookCart.vo.BookCartVO"%>
 <%@page import="java.util.List"%>
-<%@page import="com.BookIng.bookCart.service.BookCartListService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -13,10 +13,7 @@
 <%
 // DB에서 데이터를 가져온다. 
 BookCartVO vo = new BookCartVO();
-LoginVO loginVO = (LoginVO) session.getAttribute("login");
-String id = loginVO.getId();
-vo.setId(id);
-BookCartListService Service = new BookCartListService();
+BookCartMasterListService Service = new BookCartMasterListService();
 List<BookCartVO> list = Service.service(vo);
 System.out.println(list);
 
@@ -58,6 +55,8 @@ request.setAttribute("list", list);
 		<h2>장바구니</h2>
 		<table class="table">
 			<tr>
+				<th>아이디</th>
+				<th>도서번호</th>
 				<th>책표지</th>
 				<th>제목</th>
 				<th>작가</th>
@@ -75,8 +74,10 @@ request.setAttribute("list", list);
 			<c:if test="${!empty list }">
 				<c:forEach items="${list }" var="vo">
 					<tr class="dataRow cart_info_td">
-						<td class="no" id="hidden">${vo.bookNo}</td>
-						<td class="id" id="hidden">${vo.id}</td>
+						<td class="id">${vo.id}</td>
+						<td class="no"><span style="color:#cccccc">[&nbsp;</span> 
+						${vo.bookNo}
+						<span style="color:#cccccc">&nbsp;]</span></td>
 						<td><img src="${vo.cover}" alt="cover"
 							style="width: 100px; height: 130px;" /></td>
 						<td><a href="/bookBoard/view.jsp?bookNo=${vo.bookNo}" >${vo.title}</a></td>
@@ -86,16 +87,16 @@ request.setAttribute("list", list);
 						<td id="quantity" class="quantity" >
 						<span class="count count-box">
 								<button type="button" class="upBtn btn-warning"
-								onclick="location.href='/bookCart/addCart.jsp?bookNo=${vo.bookNo}&bookCount=1';">+</button>
+								onclick="location.href='/bookCart/addCartM.jsp?bookNo=${vo.bookNo}&bookCount=1';">+</button>
 								<input type="text" class="countInput" id="quantity" name="countInput"
 								value="${vo.quantity}" readonly="readonly" style="width: 20px; border: none;">
 								<button type="button" class="downBtn btn-warning"
-								onclick="location.href='/bookCart/addCart.jsp?bookNo=${vo.bookNo}&bookCount=-1';">-</button>
+								onclick="location.href='/bookCart/addCartM.jsp?bookNo=${vo.bookNo}&bookCount=-1';">-</button>
 						</span></td>
 						<td><input id="result" type="hidden" class="getTotalPrice"
 							value="${vo.totalPrice}" /> 
 							<fmt:formatNumber value="${vo.totalPrice}" pattern="#,###" />원</td>
-						<td><a href="deleteBooks.jsp?cartNo=${vo.cartNo }" class="btn btn-danger">삭제</a></td>
+						<td><a href="deleteBooksM.jsp?cartNo=${vo.cartNo }" class="btn btn-danger">삭제</a></td>
 					</tr>
 				</c:forEach>
 			</c:if>
@@ -113,18 +114,11 @@ request.setAttribute("list", list);
 					<span style="color:#cccccc">[&nbsp;</span> 
 					<fmt:formatNumber value="${total}" pattern="#,###" />
 					원<span style="color:#cccccc">&nbsp;]</span> 
-					<button onclick="location.href='/bookCart/purchase.jsp';"
-					 type="button" class="btn btn-info">결제페이지로</button>
 				</div>
 				<br>
 			</div>
 			&nbsp;&nbsp;
 			<a href="/bookBoard/list.jsp" class="btn btn-default">상품 목록</a>
-		<c:if test="${!empty login && login.gradeNo == 9}">
-			<div class="text-center">
-				<br><a href="cartMasterList.jsp" class="btn btn-default">관리자용 마스터 장바구니</a>
-			</div>
-		</c:if>
 		</div>
 	</div>
 </body>

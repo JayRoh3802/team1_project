@@ -51,11 +51,12 @@ request.setAttribute("list", list);
 </style>
 <script type="text/javascript">
 	function purchase() {
+		// 3자리 마다 콤마를 찍어주는 표현식
 		var total = document.getElementById("total").value;
 		var totalC = total.toString()
 		  .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 		
-		if (confirm(totalC +('원이 결제됩니다.'))) { /* confirm() : 사용자가 선택할 때 이용(확인, 취소) */
+		if (confirm(totalC +('원이 결제됩니다.'))) {  // confirm() : 사용자가 선택할 때 이용(확인, 취소) 
 			alert("결제가 완료 되었습니다");
 			document.purchaseForm.submit();
 		} else {

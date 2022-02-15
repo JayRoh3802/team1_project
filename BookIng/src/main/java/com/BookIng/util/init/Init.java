@@ -79,6 +79,9 @@ public class Init extends HttpServlet {
 		authorityMap.put("/bookCart/deleteCart.jsp", 1);
 		authorityMap.put("/bookCart/purchase.jsp", 1);
 		authorityMap.put("/bookCart/removeBook.jsp", 1);
+		authorityMap.put("/bookCart/cartMasterList.jsp", 9);
+		authorityMap.put("/bookCart/addCartM.jsp", 9);
+		authorityMap.put("/bookCart/deleteBooksM.jsp", 9);
 
 	}
 

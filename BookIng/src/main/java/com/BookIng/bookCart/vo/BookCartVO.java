@@ -3,9 +3,8 @@ package com.BookIng.bookCart.vo;
 public class BookCartVO {
 	
 	private long cartNo, bookNo, quantity, bookCount;
-	private String id, title, writer, cover;
+	private String id, title, writer, cover, genre;
 	private long price, totalPrice;
-	
 	
 	public long getCartNo() {
 		return cartNo;
@@ -55,6 +54,12 @@ public class BookCartVO {
 	public void setCover(String cover) {
 		this.cover = cover;
 	}
+	public String getGenre() {
+		return genre;
+	}
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
 	public long getPrice() {
 		return price;
 	}
@@ -70,14 +75,8 @@ public class BookCartVO {
 	@Override
 	public String toString() {
 		return "BookCartVO [cartNo=" + cartNo + ", bookNo=" + bookNo + ", quantity=" + quantity + ", bookCount="
-				+ bookCount + ", id=" + id + ", title=" + title + ", writer=" + writer + ", cover=" + cover + ", price="
-				+ price + ", totalPrice=" + totalPrice + "]";
+				+ bookCount + ", id=" + id + ", title=" + title + ", writer=" + writer + ", cover=" + cover + ", genre="
+				+ genre + ", price=" + price + ", totalPrice=" + totalPrice + "]";
 	}
-	
-	
-	
-	
-	
-	
 	
 }
