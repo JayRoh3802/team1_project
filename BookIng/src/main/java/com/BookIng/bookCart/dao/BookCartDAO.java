@@ -378,14 +378,12 @@ public class BookCartDAO {
 			con = DB.getConnection();
 			//sql : id, gno, size, color 모두 만족하는 대상 검색
 			String sql ="update bookCart set quantity = quantity + ? "
-					+ " where bookNo = ? ";
+					+ " where cartNo = ? ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, vo.getBookCount());
-			pstmt.setLong(2, vo.getBookNo());
+			pstmt.setLong(2, vo.getCartNo());
 			rs = pstmt.executeQuery();
 			System.out.println("기존의 상품에 수량 변경완료");
-			if(rs.next()){ //중복상품인 경우
-			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

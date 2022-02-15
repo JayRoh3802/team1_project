@@ -12,6 +12,6 @@
 <p>
 페이지가 존재하지 않습니다.
 </p>
-<a href="/bookBoard/list.jsp"><button>게시판으로</button></a>
+<a href="/main/main.jsp"><button>메인으로</button></a>
 </body>
 </html>

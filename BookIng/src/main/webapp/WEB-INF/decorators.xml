@@ -14,6 +14,7 @@
 		<pattern>/grade/*</pattern>
 		<pattern>/login/*</pattern>
 		<pattern>/main/*</pattern>
+		<pattern>/error/*</pattern>
 	</decorator>
 	
 <!-- 	<decorator name="admin" page="admin_decorator.jsp"> -->

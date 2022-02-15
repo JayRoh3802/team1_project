@@ -87,11 +87,11 @@ request.setAttribute("list", list);
 						<td id="quantity" class="quantity" >
 						<span class="count count-box">
 								<button type="button" class="upBtn btn-warning"
-								onclick="location.href='/bookCart/addCartM.jsp?bookNo=${vo.bookNo}&bookCount=1';">+</button>
+								onclick="location.href='/bookCart/addCartM.jsp?cartNo=${vo.cartNo}&bookCount=1';">+</button>
 								<input type="text" class="countInput" id="quantity" name="countInput"
 								value="${vo.quantity}" readonly="readonly" style="width: 20px; border: none;">
 								<button type="button" class="downBtn btn-warning"
-								onclick="location.href='/bookCart/addCartM.jsp?bookNo=${vo.bookNo}&bookCount=-1';">-</button>
+								onclick="location.href='/bookCart/addCartM.jsp?cartNo=${vo.cartNo}&bookCount=-1';">-</button>
 						</span></td>
 						<td><input id="result" type="hidden" class="getTotalPrice"
 							value="${vo.totalPrice}" /> 
