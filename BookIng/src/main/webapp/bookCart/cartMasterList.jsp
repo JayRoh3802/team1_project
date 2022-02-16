@@ -52,7 +52,7 @@ request.setAttribute("list", list);
 </head>
 <body>
 	<div class="container">
-		<h2>장바구니</h2>
+		<h2>관리자용 전체 장바구니</h2>
 		<table class="table">
 			<tr>
 				<th>아이디</th>

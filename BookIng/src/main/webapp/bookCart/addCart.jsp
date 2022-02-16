@@ -29,7 +29,6 @@ vo.setId(id);
 //해당상품(+옵션까지)이 장바구니에 동일한게 있는지 체크
 int result = dao.checkBooks(vo);
 
-// basketAdd() - 추가
 if(result != 1){ //장바구니에 해당상품이 없다
 	BookCartAddService service = new BookCartAddService();
 	service.service(vo);

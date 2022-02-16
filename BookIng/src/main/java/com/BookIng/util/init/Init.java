@@ -83,6 +83,13 @@ public class Init extends HttpServlet {
 		authorityMap.put("/bookCart/addCartM.jsp", 9);
 		authorityMap.put("/bookCart/deleteBooksM.jsp", 9);
 
+		// 등급관리 권한
+	    authorityMap.put("/grade/list.jsp", 9);
+	    authorityMap.put("/grade/write.jsp", 9);
+	    authorityMap.put("/grade/writeForm.jsp", 9);
+	    authorityMap.put("/grade/updateForm.jsp", 9);
+	    authorityMap.put("/grade/update.jsp", 9);
+	    authorityMap.put("/grade/delete.jsp", 9);
 	}
 
 }
